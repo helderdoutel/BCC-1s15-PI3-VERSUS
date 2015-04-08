@@ -5,33 +5,35 @@
 
 #include "camera.h"
 
+#define FPS 60
+
 int main(){
 	camera *cam = camera_inicializa(0);
 	if(!cam)
-    	erro("nao foi possivel inicializar camera");
+    	printf("nao foi possivel inicializar camera");
 
 	  int largura = cam->largura;
 	  int altura = cam->altura;
 
   	if(!al_init())
-	    erro("nao foi possivel inicializar allegro");
+	    printf("nao foi possivel inicializar allegro");
 
   	if(!al_init_primitives_addon())
-  	  erro("nao foi possivel inicializar adicional de primitivas");
+  	  printf("nao foi possivel inicializar adicional de primitivas");
 
   	ALLEGRO_EVENT_QUEUE *queue = al_create_event_queue();
   	if(!queue)
-    	erro("nao foi possivel criar fila de eventos");
+    	printf("nao foi possivel criar fila de eventos");
 
   	ALLEGRO_DISPLAY *display = al_create_display(2 * largura, altura);
   	if(!display)
-    	erro("nao foi possivel criar janela");
+    	printf("nao foi possivel criar janela");
 
   	al_register_event_source(queue, al_get_display_event_source(display));
 
   	ALLEGRO_TIMER *timer = al_create_timer(1.0 / FPS);
   	if(!timer)
-    	erro("nao foi possivel criar relogio");
+    	printf("nao foi possivel criar relogio");
 
 	al_register_event_source(queue, al_get_timer_event_source(timer));
 
@@ -44,6 +46,40 @@ int main(){
 	ALLEGRO_BITMAP *esquerda = al_create_sub_bitmap(buffer, 0, 0, largura, altura);
 
 	ALLEGRO_BITMAP *direita = al_create_sub_bitmap(buffer, largura, 0, largura, altura);
+
+  al_start_timer(timer);
+  int atualizar = 1;
+
+  while(1){
+    ALLEGRO_EVENT event;
+
+    al_wait_for_event(queue, &event);
+    al_flip_display();
+    if(atualizar == 1){
+      camera_atualiza(cam);
+      camera_copia(cam, cam->quadro, esquerda);
+      atualizar = 0;
+    }
+    al_draw_bitmap(esquerda, 0, 0, 0);
+    if(event.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
+      break;
+    }
+    al_start_timer(timer);
+    switch(event.type) {
+    case ALLEGRO_EVENT_TIMER:
+      atualizar = 1;
+      break;
+    }
+
+   
+
+  }
+  al_stop_timer(timer);
+  al_destroy_bitmap(direita);
+
+  al_destroy_bitmap(esquerda);
+
+  camera_libera_matriz(cam, matriz);
 
 	return 0;
 }

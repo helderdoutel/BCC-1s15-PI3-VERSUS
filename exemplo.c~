@@ -114,7 +114,7 @@ int main() {
 
       /**********/
 
-      
+      camera_copia(cam, cam->quadro, esquerda);
 
       if(cn > 0)
         al_draw_circle(cx / cn, cy / cn, 120, cor, 1);
