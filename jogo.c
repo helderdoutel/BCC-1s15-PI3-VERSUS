@@ -48,27 +48,30 @@ int main(){
 	ALLEGRO_BITMAP *direita = al_create_sub_bitmap(buffer, largura, 0, largura, altura);
 
   al_start_timer(timer);
-  int atualizar = 1;
+  int atualizar = 1, continuar = 1;
 
-  while(1){
+  while(continuar == 1){
     ALLEGRO_EVENT event;
 
     al_wait_for_event(queue, &event);
     al_flip_display();
     if(atualizar == 1){
-      camera_atualiza(cam);
+      camera_atualiza(cam);  
+      al_flip_display();
       camera_copia(cam, cam->quadro, esquerda);
       atualizar = 0;
     }
-    al_draw_bitmap(esquerda, 0, 0, 0);
-    if(event.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
-      break;
-    }
-    al_start_timer(timer);
+  
+    al_wait_for_event(queue, &event);
     switch(event.type) {
+    case ALLEGRO_EVENT_DISPLAY_CLOSE:
+      continuar = 0;
+      break;
     case ALLEGRO_EVENT_TIMER:
       atualizar = 1;
       break;
+    al_flip_display();
+
     }
 
    
