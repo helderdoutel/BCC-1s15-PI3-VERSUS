@@ -47,69 +47,69 @@ int main(){
 
 	ALLEGRO_BITMAP *direita = al_create_sub_bitmap(buffer, largura, 0, largura, altura);
 
-  al_start_timer(timer);
-  int atualizar = 1, continuar = 1;
-  printf("%d %d\n", altura, largura);
+    al_start_timer(timer);
+    int atualizar = 1, continuar = 1;
+    printf("%d %d\n", altura, largura);
 
-  while(continuar == 1){
-    ALLEGRO_EVENT event;
+    while(continuar == 1){
+        ALLEGRO_EVENT event;
 
-    al_wait_for_event(queue, &event);
-    al_flip_display();
-    if(atualizar == 1){
-        camera_atualiza(cam);  
-       for(int x = 0; x < altura ; x++){
+        al_wait_for_event(queue, &event);
+        al_flip_display();
+        if(atualizar == 1){
+            camera_atualiza(cam);  
+            for(int x = 0; x < altura ; x++){
            
-            for(int y = 0; y < largura ; y++){
+                for(int y = 0; y < largura ; y++){
             
                 
-                int r = cam->quadro[x][y][0];
-                int g = cam->quadro[x][y][1];
-                int b = cam->quadro[x][y][2];
-                if(r > 130 && g > 130 && b >130){
-                    matriz[x][y][0] = 255;
-                    matriz[x][y][1] = 0;  
-                    matriz[x][y][2] = 0;
+                    int r = cam->quadro[x][y][0];
+                    int g = cam->quadro[x][y][1];
+                    int b = cam->quadro[x][y][2];
+                    if(r > 130 && g > 130 && b >130){
+                        matriz[x][y][0] = 255;
+                        matriz[x][y][1] = 0;  
+                        matriz[x][y][2] = 0;
     
-                }
-                else{
+                    }
+                    else{
                     
-                    matriz[x][y][0] = cam->quadro[x][y][0];
-                    matriz[x][y][1] = cam->quadro[x][y][1];
-                    matriz[x][y][2] = cam->quadro[x][y][2];
+                        matriz[x][y][0] = cam->quadro[x][y][0];
+                        matriz[x][y][1] = cam->quadro[x][y][1];
+                        matriz[x][y][2] = cam->quadro[x][y][2];
+                    }
+                    if(x == 639)
+                    printf("preencheu\n");
                 }
-                if(x == 639)
-                printf("preencheu\n");
+
             }
+
+            camera_copia(cam, cam->quadro, esquerda);
+            atualizar = 0;
+            camera_copia(cam,matriz,direita);
+        }
+  
+        al_wait_for_event(queue, &event);
+        switch(event.type) {
+        case ALLEGRO_EVENT_DISPLAY_CLOSE:
+            continuar = 0;
+            break;
+        case ALLEGRO_EVENT_TIMER:
+            atualizar = 1;
+            break;
+        al_flip_display();
 
         }
 
-        camera_copia(cam, cam->quadro, esquerda);
-        atualizar = 0;
-        camera_copia(cam,matriz,direita);
-    }
-  
-    al_wait_for_event(queue, &event);
-    switch(event.type) {
-    case ALLEGRO_EVENT_DISPLAY_CLOSE:
-        continuar = 0;
-        break;
-    case ALLEGRO_EVENT_TIMER:
-        atualizar = 1;
-        break;
-    al_flip_display();
-
-    }
-
    
 
-  }
-  al_stop_timer(timer);
-  al_destroy_bitmap(direita);
+    }
+    al_stop_timer(timer);
+    al_destroy_bitmap(direita);
 
-  al_destroy_bitmap(esquerda);
+    al_destroy_bitmap(esquerda);
 
-  camera_libera_matriz(cam, matriz);
+    camera_libera_matriz(cam, matriz);
 
 	return 0;
 }
