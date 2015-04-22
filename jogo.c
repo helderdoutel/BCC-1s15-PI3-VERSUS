@@ -49,7 +49,7 @@ int main(){
 
     al_start_timer(timer);
     int atualizar = 1, continuar = 1;
-    printf("%d %d\n", altura, largura);
+    //printf("%d %d\n", altura, largura);
 
     while(continuar == 1){
         ALLEGRO_EVENT event;
@@ -66,20 +66,29 @@ int main(){
                     int r = cam->quadro[x][y][0];
                     int g = cam->quadro[x][y][1];
                     int b = cam->quadro[x][y][2];
-                    if(r > 130 && g > 130 && b >130){
+                    if(r > 200 && r>g+20 && r>b+20){
                         matriz[x][y][0] = 255;
                         matriz[x][y][1] = 0;  
                         matriz[x][y][2] = 0;
+
     
                     }
                     else{
-                    
-                        matriz[x][y][0] = cam->quadro[x][y][0];
-                        matriz[x][y][1] = cam->quadro[x][y][1];
-                        matriz[x][y][2] = cam->quadro[x][y][2];
+                        
+                        if(b >160 && b > g+50 && b > r+50){
+                            matriz[x][y][0] = 0;
+                            matriz[x][y][1] = 0;  
+                            matriz[x][y][2] = 255;
+
+    
+                        }
+                        else{
+                            matriz[x][y][0] = cam->quadro[x][y][0];
+                            matriz[x][y][1] = cam->quadro[x][y][1];
+                            matriz[x][y][2] = cam->quadro[x][y][2];
+                        }
                     }
-                    if(x == 639)
-                    printf("preencheu\n");
+                    
                 }
 
             }
