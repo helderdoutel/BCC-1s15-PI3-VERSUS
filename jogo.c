@@ -7,8 +7,75 @@
 
 #define FPS 60
 
+int pver(unsigned char ***matriz, int altura, int largura, int *rx, int *ry){
+    int baixo, direita, esquerda, cima;
+    int r, g, b;
+    int achoux, achouy;
+    for(int x = 0; x < altura ; x++){
+        for(int y = 0; y < largura ; y++){
+            r = matriz[x][y][0];
+            g = matriz[x][y][1];
+            b = matriz[x][y][2];
+            if(r == 255 && b == 0 && g == 0){
+                if(x + 5 < altura && x - 5 > 0){
+                    cima = matriz[(x + 5)][y][0];
+                    baixo = matriz[(x - 5)][y][0];
+                }
+                if(y + 5 < largura && y - 5 > 0){
+                    direita = matriz[x][(y + 5)][0];
+                    esquerda = matriz[x][(y - 5)][0];
+                }
+                if(cima == 255 && baixo == 255 && direita == 255 && esquerda == 255){
+                    *rx = x;
+                    *ry = y;
+                }
+            }
+            cima = 0;
+            baixo = 0;
+            direita = 0;
+            esquerda = 0;
+        }
+    }
+    return 1;
+}
+
+int pazul(unsigned char ***matriz, int altura, int largura, int *bx, int *by){
+    int baixo, direita, esquerda, cima;
+    int r, g, b;
+    int achoux, achouy;
+    for(int x = 0; x < altura ; x++){
+        for(int y = 0; y < largura ; y++){
+            r = matriz[x][y][0];
+            g = matriz[x][y][1];
+            b = matriz[x][y][2];
+            if(r == 0 && b == 255 && g == 0){
+                if(x + 5 < altura && x - 5 > 0){
+                    cima = matriz[(x + 5)][y][2];
+                    baixo = matriz[(x - 5)][y][2];
+                }
+                if(y + 5 < largura && y - 5 > 0){
+                    direita = matriz[x][(y + 5)][2];
+                    esquerda = matriz[x][(y - 5)][2];
+                }
+                if(cima == 255 && baixo == 255 && direita == 255 && esquerda == 255){
+                    *bx = x;
+                    *by = y;
+                }
+            }
+            cima = 0;
+            baixo = 0;
+            direita = 0;
+            esquerda = 0;
+        }
+    }
+    return 1;
+}
+
 int main(){
+    int rx, ry, bx, by;
+    int testex, testey;
 	camera *cam = camera_inicializa(0);
+    int f;
 	if(!cam)
         printf("nao foi possivel inicializar camera");
 
@@ -70,9 +137,8 @@ int main(){
                         matriz[x][y][0] = 255;
                         matriz[x][y][1] = 0;  
                         matriz[x][y][2] = 0;
-
-    
                     }
+                    
                     else{
                         
                         if(b >160 && b > g+50 && b > r+50){
@@ -92,6 +158,31 @@ int main(){
                 }
 
             }
+            f = pver(matriz,altura,largura,&rx,&ry);
+            f = pazul(matriz,altura,largura,&bx,&by);
+
+            printf("vermelho x = %d y = %d / azul x = %d y = %d\n", rx, ry, bx, by);
+            
+            
+            for(;rx < altura; rx++){
+                for(;ry < largura; ry++){
+                matriz[rx][ry][0] = 0;
+                matriz[rx][ry][1] = 0;  
+                matriz[rx][ry][2] = 255;
+              }
+            }
+            for(;bx < altura; bx++){
+                for(;by < largura; by++){
+                matriz[bx][by][0] = 255;
+                matriz[bx][by][1] = 0;  
+                matriz[bx][by][2] = 0;
+              }
+            }
+
+            rx = 0;
+            ry = 0;
+            bx = 0;
+            by = 0;
 
             camera_copia(cam, cam->quadro, esquerda);
             atualizar = 0;
