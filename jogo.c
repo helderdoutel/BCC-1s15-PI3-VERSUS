@@ -133,7 +133,7 @@ int main(){
                     int r = cam->quadro[x][y][0];
                     int g = cam->quadro[x][y][1];
                     int b = cam->quadro[x][y][2];
-                    if(r > 200 && r>g+20 && r>b+20){
+                    if(r > 160 && r>g+50 && r>b+50){
                         matriz[x][y][0] = 255;
                         matriz[x][y][1] = 0;  
                         matriz[x][y][2] = 0;
