@@ -71,9 +71,23 @@ int pazul(unsigned char ***matriz, int altura, int largura, int *bx, int *by){
     return 1;
 }
 
+int pega(int rx, int ry, int bx, int by, int *srx, int *sry, int *sbx, int *sby){
+    //printf("%d %d\n", rx, *srx);
+    if(rx < *srx - 50 && rx != *srx){
+        printf("pulou\n %d %d\n", rx, *srx);
+    }
+
+    *srx = rx;
+    *sry = ry;
+    *sbx = bx;
+    *sby = by;
+}
+
+
 int main(){
     int rx, ry, bx, by;
-    int testex, testey;
+    int srx, sry, sbx, sby; //gaurda valor antigo
+    int testex, testey, contador = 0, acao = 0;
 	camera *cam = camera_inicializa(0);
     int f;
 	if(!cam)
@@ -124,6 +138,7 @@ int main(){
         al_wait_for_event(queue, &event);
         al_flip_display();
         if(atualizar == 1){
+            contador++;
             camera_atualiza(cam);  
             for(int x = 0; x < altura ; x++){
            
@@ -161,7 +176,11 @@ int main(){
             f = pver(matriz,altura,largura,&rx,&ry);
             f = pazul(matriz,altura,largura,&bx,&by);
 
-            printf("vermelho x = %d y = %d / azul x = %d y = %d\n", rx, ry, bx, by);
+            //printf("vermelho x = %d y = %d / azul x = %d y = %d\n", rx, ry, bx, by);
+            if(contador == 5){
+                pega(rx, ry, bx, by, &srx, &sry, &sbx, &sby);
+                contador = 0;
+            }
             
             
             for(;rx < altura; rx++){
@@ -179,10 +198,12 @@ int main(){
               }
             }
 
+
             rx = 0;
             ry = 0;
             bx = 0;
             by = 0;
+            
 
             camera_copia(cam, cam->quadro, esquerda);
             atualizar = 0;
