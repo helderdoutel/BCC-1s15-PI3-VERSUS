@@ -115,12 +115,12 @@ int ang (int rx, int ry, int bx, int by){
         return 0;
 
     printf("xa = %d, xb = %d, ya = %d, yb = %d\n", xa, xb, ya, yb);
-    d = (xb - xa)^2 + (yb - ya)^2;
-    printf("d %f\n", d);
-    //d = sqrt(d);
-    //printf("raiz %d\n", d);
     dx = xb - xa;
     dy = yb - ya;
+    d = (dx*dx) + (dy*dy);
+    printf("d %f\n", d);
+    d = sqrt(d);
+    printf("raiz %f\n", d);
     printf("dx %d dy %d\n", dx, dy);
     seno = dy/d;
 
@@ -145,7 +145,7 @@ int main(){
     int testex, testey, contador = 0, acao = 0;
 	camera *cam = camera_inicializa(0);
     int f;
-    int pulou = 0;
+    int pulou = 0, angulo = 0;
 	if(!cam)
         printf("nao foi possivel inicializar camera");
 
@@ -194,6 +194,8 @@ int main(){
         al_wait_for_event(queue, &event);
         al_flip_display();
         if(atualizar == 1){
+            angulo = 0;
+            pulou = 0;
             contador++;
             camera_atualiza(cam);  
             for(int x = 0; x < altura ; x++){
@@ -236,7 +238,7 @@ int main(){
             if(contador == 5){
                 pulou = pega(rx, ry, bx, by, &srx, &sry, &sbx, &sby);
                 contador = 0;
-                ang(rx, ry, bx, by);
+                angulo = ang(rx, ry, bx, by);
             }
             
             
