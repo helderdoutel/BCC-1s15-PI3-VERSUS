@@ -88,8 +88,11 @@ int pega(int rx, int ry, int bx, int by, int *srx, int *sry, int *sbx, int *sby)
 }
 
 int ang (int rx, int ry, int bx, int by){
-    int xa, xb, ya, yb;
-    int d = 0;
+    int xa = 0, xb = 0, ya = 0 , yb = 0;
+    int dx, dy;
+    float d;
+    float seno;
+    int angulo = 0;
 
     if(ry < by){
         xa = ry;
@@ -107,13 +110,32 @@ int ang (int rx, int ry, int bx, int by){
         yb = rx;
         ya = bx;
     }
-    printf("xa = %d, xb = %d, ya = %d, yb = %d\n", xa, xb, ya, yb);
-    d = sqrt((xb - xa)^2 + (yb - ya)^2);
-    //printf("d %d\n", d);
-    //d = sqrt(d);
-    printf("raiz %d\n", d);
 
-    
+    if(xa == 0 || xb == 0 || ya == 0 || yb == 0)
+        return 0;
+
+    printf("xa = %d, xb = %d, ya = %d, yb = %d\n", xa, xb, ya, yb);
+    d = (xb - xa)^2 + (yb - ya)^2;
+    printf("d %f\n", d);
+    //d = sqrt(d);
+    //printf("raiz %d\n", d);
+    dx = xb - xa;
+    dy = yb - ya;
+    printf("dx %d dy %d\n", dx, dy);
+    seno = dy/d;
+
+    printf("%f\n", seno);
+    if (seno > 0.34 && seno < 1 && bx < rx){
+        printf("45\n");
+        angulo = 1;
+    }
+    if (seno > 0.34 && seno < 1 && bx > rx){
+        printf("- 45\n");
+        angulo = -1;
+    }
+
+    return angulo;
+
 }
 
 
