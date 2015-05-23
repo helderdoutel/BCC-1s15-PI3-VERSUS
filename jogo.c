@@ -4,6 +4,7 @@
 #include <allegro5/allegro_primitives.h>
 
 #include "camera.h"
+#include "math.h"
 
 #define FPS 60
 
@@ -73,23 +74,56 @@ int pazul(unsigned char ***matriz, int altura, int largura, int *bx, int *by){
 
 int pega(int rx, int ry, int bx, int by, int *srx, int *sry, int *sbx, int *sby){
     //printf("%d %d\n", rx, *srx);
+    int x = 0;
     if(rx < *srx - 50 && rx != *srx){
-        printf("pulou\n %d %d\n", rx, *srx);
+        printf("pulou: %d %d\n", rx, *srx);
+        x = 1;
     }
 
     *srx = rx;
     *sry = ry;
     *sbx = bx;
     *sby = by;
+    return x;
+}
+
+int ang (int rx, int ry, int bx, int by){
+    int xa, xb, ya, yb;
+    int d = 0;
+
+    if(ry < by){
+        xa = ry;
+        xb = by;
+    }
+    else{
+        xb = ry;
+        xa = by;
+    }
+    if(rx < bx){
+        ya = rx;
+        yb = bx;
+    }
+    else{
+        yb = rx;
+        ya = bx;
+    }
+    printf("xa = %d, xb = %d, ya = %d, yb = %d\n", xa, xb, ya, yb);
+    d = sqrt((xb - xa)^2 + (yb - ya)^2);
+    //printf("d %d\n", d);
+    //d = sqrt(d);
+    printf("raiz %d\n", d);
+
+    
 }
 
 
 int main(){
     int rx, ry, bx, by;
-    int srx, sry, sbx, sby; //gaurda valor antigo
+    int srx, sry, sbx, sby; //guarda valor antigo
     int testex, testey, contador = 0, acao = 0;
 	camera *cam = camera_inicializa(0);
     int f;
+    int pulou = 0;
 	if(!cam)
         printf("nao foi possivel inicializar camera");
 
@@ -178,8 +212,9 @@ int main(){
 
             //printf("vermelho x = %d y = %d / azul x = %d y = %d\n", rx, ry, bx, by);
             if(contador == 5){
-                pega(rx, ry, bx, by, &srx, &sry, &sbx, &sby);
+                pulou = pega(rx, ry, bx, by, &srx, &sry, &sbx, &sby);
                 contador = 0;
+                ang(rx, ry, bx, by);
             }
             
             
