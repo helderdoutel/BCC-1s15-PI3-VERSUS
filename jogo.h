@@ -10,11 +10,19 @@
 
 int randompoint(){
         time_t t;
-
         srand((unsigned) time(&t));
+        return rand()%480+1;
+}
 
-        return rand()%500+1;
-
+float aleatorio(float *y){
+    float random;
+    *y = randompoint();
+    random = *y - 400;
+    if(random < 0){
+        random = random * -1;
+    }
+    printf("ramdom%f  y%f\n", random, *y);
+    return random;
 }
 
 int pver(unsigned char ***matriz, int altura, int largura, int *rx, int *ry){
@@ -124,17 +132,17 @@ int ang (int rx, int ry, int bx, int by){
     if(xa == 0 || xb == 0 || ya == 0 || yb == 0)
         return 0;
 
-    printf("xa = %d, xb = %d, ya = %d, yb = %d\n", xa, xb, ya, yb);
+    //printf("xa = %d, xb = %d, ya = %d, yb = %d\n", xa, xb, ya, yb);
     dx = xb - xa;
     dy = yb - ya;
     d = (dx*dx) + (dy*dy);
-    printf("d %f\n", d);
+    //printf("d %f\n", d);
     d = sqrt(d);
-    printf("raiz %f\n", d);
-    printf("dx %d dy %d\n", dx, dy);
+    //printf("raiz %f\n", d);
+    //printf("dx %d dy %d\n", dx, dy);
     seno = dy/d;
 
-    printf("%f\n", seno);
+    //printf("%f\n", seno);
     if (seno > 0.34 && seno < 1 && bx < rx){
         printf("45\n");
         angulo = 1;
@@ -319,8 +327,9 @@ void detectacam(ALLEGRO_DISPLAY *janela){
     int f;
     int pulou = 0, angulo = 0;
     int flag = 0;
-    int randon;
-    int randx, randy;
+    int randx = 0, var;
+    float mult, randy, dif;
+    int life = 0;
 
     map = al_load_bitmap("imagens/mapadefender.png");
     tiro = al_load_bitmap("imagens/tiro.png");
@@ -380,11 +389,13 @@ void detectacam(ALLEGRO_DISPLAY *janela){
         ALLEGRO_EVENT event;
         //al_wait_for_event(queue, &event);
         if(atualizar == 1){  
-            if(contadorrandom >= 0 && contadorrandom < 120)
+            if(contadorrandom >= 0 && contadorrandom < 120){
                 contadorrandom++;
+            }
 
-            if(contadorrandom == 120)
+            if(contadorrandom > 120){
                 contadorrandom == 0;
+            }
 
             if(flag == 1){
                 contador2--;
@@ -458,12 +469,43 @@ void detectacam(ALLEGRO_DISPLAY *janela){
                     flag = 0;
                 }
             }
+
+            if(contadorrandom == 1){
+                dif = aleatorio(&randy);
+                mult = dif/130;
+                randx = 0;
+            }
+
+            randy = randy + mult;
+            randx = randx + 3;
+
+            var = contador2 * 5;
+            //printf("var %d\n", var);
+            if(randx > 410 && randy  < 420 + var && randy > 200 + var && randx < 440){
+                life++;
+                contadorrandom = 0;
+                printf("%d %f %d\n", randx, randy, var);
+            }
+            if(randx > 800 || randy > 600){
+                contadorrandom = 0;
+            }
+            if(life == 5)
+                break;
+           
+
+
+
+
+            al_draw_bitmap(fogo, randx, randy, 0);
+            //printf("%d %f, %f\n", randx, randy, mult);
+
             
             //printf("%f\n", contador2);
 
             if(pulou == 0 && contador2 == 0){
                 al_draw_bitmap(map, 0, 0, 0);
                 al_draw_bitmap(tiro, 70, 0, 0);
+                al_draw_bitmap(fogo, randx, randy, 0);
             }
             
             
