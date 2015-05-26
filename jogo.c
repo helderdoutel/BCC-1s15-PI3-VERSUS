@@ -12,6 +12,7 @@ int pver(unsigned char ***matriz, int altura, int largura, int *rx, int *ry){
     int baixo, direita, esquerda, cima;
     int r, g, b;
     int achoux, achouy;
+    *ry = 0;
     for(int x = 0; x < altura ; x++){
         for(int y = 0; y < largura ; y++){
             r = matriz[x][y][0];
@@ -26,7 +27,7 @@ int pver(unsigned char ***matriz, int altura, int largura, int *rx, int *ry){
                     direita = matriz[x][(y + 5)][0];
                     esquerda = matriz[x][(y - 5)][0];
                 }
-                if(cima == 255 && baixo == 255 && direita == 255 && esquerda == 255){
+                if(cima == 255 && baixo == 255 && direita == 255 && esquerda == 255 && y > *ry){
                     *rx = x;
                     *ry = y;
                 }
@@ -40,7 +41,7 @@ int pver(unsigned char ***matriz, int altura, int largura, int *rx, int *ry){
     return 1;
 }
 
-int pazul(unsigned char ***matriz, int altura, int largura, int *bx, int *by){
+int pazul(unsigned char ***matriz, int altura, int largura, int *bx, int *by, int *ry){
     int baixo, direita, esquerda, cima;
     int r, g, b;
     int achoux, achouy;
@@ -58,7 +59,7 @@ int pazul(unsigned char ***matriz, int altura, int largura, int *bx, int *by){
                     direita = matriz[x][(y + 5)][2];
                     esquerda = matriz[x][(y - 5)][2];
                 }
-                if(cima == 255 && baixo == 255 && direita == 255 && esquerda == 255){
+                if(cima == 255 && baixo == 255 && direita == 255 && esquerda == 255 && *ry > y){
                     *bx = x;
                     *by = y;
                 }
@@ -232,7 +233,7 @@ int main(){
 
             }
             f = pver(matriz,altura,largura,&rx,&ry);
-            f = pazul(matriz,altura,largura,&bx,&by);
+            f = pazul(matriz,altura,largura,&bx,&by,&ry);
 
             //printf("vermelho x = %d y = %d / azul x = %d y = %d\n", rx, ry, bx, by);
             if(contador == 5){
