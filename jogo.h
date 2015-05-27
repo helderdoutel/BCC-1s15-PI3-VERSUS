@@ -163,6 +163,7 @@ void testecam(){
     camera *cam = camera_inicializa(0);
     int f;
     int pulou = 0, angulo = 0;
+    int pause = 0;
 
    
     if(!cam)
@@ -192,6 +193,8 @@ void testecam(){
         printf("nao foi possivel criar relogio");
 
     al_register_event_source(queue, al_get_timer_event_source(timer));
+
+    al_register_event_source(queue, al_get_mouse_event_source());
 
     unsigned char ***matriz = camera_aloca_matriz(cam);
 
@@ -254,6 +257,50 @@ void testecam(){
             f = pver(matriz,altura,largura,&rx,&ry);
             f = pazul(matriz,altura,largura,&bx,&by,&ry);
 
+            if(rx < 10 && ry < 10){
+                pause++;
+                printf("%d\n", pause);
+                if(pause == 60){
+                    printf("Pausou\n");
+                    while(1){
+                        al_flip_display();
+                        camera_atualiza(cam);
+                        for(int x = 0; x < altura ; x++){
+               
+                            for(int y = 0; y < largura ; y++){
+                                
+                
+                
+                                int r = cam->quadro[x][y][0];
+                                int g = cam->quadro[x][y][1];
+                                int b = cam->quadro[x][y][2];
+                                if(r > 160 && r>g+50 && r>b+50){
+                                    matriz[x][y][0] = 255;
+                                    matriz[x][y][1] = 0;  
+                                    matriz[x][y][2] = 0;
+                                }            
+                      
+                           
+                                else{
+                                    matriz[x][y][0] = cam->quadro[x][y][0];
+                                    matriz[x][y][1] = cam->quadro[x][y][1];
+                                    matriz[x][y][2] = cam->quadro[x][y][2];
+                                }
+                            }
+                    
+                        }
+                        pver(matriz,altura,largura,&rx,&ry);
+                        printf("passou1\n");
+                        
+                        if(rx > 10){
+                            pause = 0;
+                            break;
+                            printf("passou2\n");
+                        }
+                    }
+                }
+
+            }
             //printf("vermelho x = %d y = %d / azul x = %d y = %d\n", rx, ry, bx, by);
             if(contador == 5){
                 pulou = pega(rx, ry, bx, by, &srx, &sry, &sbx, &sby);
@@ -329,7 +376,7 @@ void detectacam(ALLEGRO_DISPLAY *janela){
     int flag = 0;
     int randx = 0, var;
     float mult, randy, dif;
-    int life = 0;
+    int life = 0, pause = 0;
 
     map = al_load_bitmap("imagens/mapadefender.png");
     tiro = al_load_bitmap("imagens/tiro.png");
@@ -351,6 +398,8 @@ void detectacam(ALLEGRO_DISPLAY *janela){
   	if(!al_init_primitives_addon())
         printf("nao foi possivel inicializar adicional de primitivas");
 
+
+
   	ALLEGRO_EVENT_QUEUE *queue = al_create_event_queue();
   	if(!queue)
         printf("nao foi possivel criar fila de eventos");
@@ -366,6 +415,8 @@ void detectacam(ALLEGRO_DISPLAY *janela){
     	printf("nao foi possivel criar relogio");
 
 	al_register_event_source(queue, al_get_timer_event_source(timer));
+
+    //al_register_event_source(queue, al_get_mouse_event_source());
 
 	unsigned char ***matriz = camera_aloca_matriz(cam);
 
@@ -446,11 +497,56 @@ void detectacam(ALLEGRO_DISPLAY *janela){
             f = pver(matriz,altura,largura,&rx,&ry);
             f = pazul(matriz,altura,largura,&bx,&by,&ry);
 
+            if(rx < 10 && ry < 10){
+                pause++;
+                printf("%d\n", pause);
+                if(pause == 60){
+                    printf("Pausou\n");
+                    while(1){
+                        al_flip_display();
+                        camera_atualiza(cam);
+                        for(int x = 0; x < altura ; x++){
+               
+                            for(int y = 0; y < largura ; y++){
+                                
+                
+                
+                                int r = cam->quadro[x][y][0];
+                                int g = cam->quadro[x][y][1];
+                                int b = cam->quadro[x][y][2];
+                                if(r > 160 && r>g+50 && r>b+50){
+                                    matriz[x][y][0] = 255;
+                                    matriz[x][y][1] = 0;  
+                                    matriz[x][y][2] = 0;
+                                }            
+                      
+                           
+                                else{
+                                    matriz[x][y][0] = cam->quadro[x][y][0];
+                                    matriz[x][y][1] = cam->quadro[x][y][1];
+                                    matriz[x][y][2] = cam->quadro[x][y][2];
+                                }
+                            }
+                    
+                        }
+                        pver(matriz,altura,largura,&rx,&ry);
+                        printf("passou1\n");
+                        if(rx > 10){
+                            pause = 0;
+                            break;
+                            printf("passou2\n");
+                        }
+                    }
+                }
+
+            }
+
             //printf("vermelho x = %d y = %d / azul x = %d y = %d\n", rx, ry, bx, by);
             if(contador == 5){
                 pulou = pega(rx, ry, bx, by, &srx, &sry, &sbx, &sby);
                 contador = 0;
-                angulo = ang(rx, ry, bx, by);
+                if(pulou == 0)
+                    angulo = ang(rx, ry, bx, by);
             }
             if(pulou == 1 && contador2 == 0){
                 al_draw_bitmap(map, 0, 0, 0);
@@ -477,11 +573,11 @@ void detectacam(ALLEGRO_DISPLAY *janela){
             }
 
             randy = randy + mult;
-            randx = randx + 3;
+            randx = randx + 5;
 
-            var = contador2 * 5;
+            var = contador2 * 10;
             //printf("var %d\n", var);
-            if(randx > 410 && randy  < 420 + var && randy > 200 + var && randx < 440){
+            if(randx > 410 && randy  < 425 + var && randy > 360 + var && randx < 440){
                 life++;
                 contadorrandom = 0;
                 printf("%d %f %d\n", randx, randy, var);
@@ -544,6 +640,7 @@ void detectacam(ALLEGRO_DISPLAY *janela){
         case ALLEGRO_EVENT_TIMER:
             atualizar = 1;
             break;
+
         //al_flip_display();
 
         }
