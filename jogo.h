@@ -14,6 +14,12 @@ int randompoint(){
         return rand()%480+1;
 }
 
+int randini(){
+        time_t t;
+        srand((unsigned) time(&t));
+        return rand()%480+1;
+}
+
 float aleatorio(float *y){
     float random;
     *y = randompoint();
@@ -363,9 +369,10 @@ void testecam(){
 
 
 
+
 void detectacam(ALLEGRO_DISPLAY *janela){
     ALLEGRO_BITMAP *map = NULL, *tiro = NULL, *tirobaixo = NULL, *tirocima = NULL, *pula = NULL, *pula2 = NULL;
-    ALLEGRO_BITMAP *fogo = NULL, *fogo2 = NULL;
+    ALLEGRO_BITMAP *fogo = NULL, *fogo2 = NULL, *ini;
     int rx, ry, bx, by;
     int srx, sry, sbx, sby; //guarda valor antigo
     int testex, testey, contador = 0, acao = 0, contadorrandom = 0;
@@ -380,6 +387,7 @@ void detectacam(ALLEGRO_DISPLAY *janela){
     float mult, randy, dif;
     float mult2, randy2, dif2;
     int life = 0, pause = 0;
+    int enex1 = 0, enex2 = 0, enex3 = 0, eney1 = 0, eney2 = 0, eney3 = 0;
 
     map = al_load_bitmap("imagens/mapadefender.png");
     tiro = al_load_bitmap("imagens/tiro.png");
@@ -389,6 +397,7 @@ void detectacam(ALLEGRO_DISPLAY *janela){
     pula2 = al_load_bitmap("imagens/pula2.png");
     fogo = al_load_bitmap("imagens/tiros.png");
     fogo2 = al_load_bitmap("imagens/tiros.png");
+    ini = al_load_bitmap("imagens/inimigo.png");
 
 	if(!cam)
         printf("nao foi possivel inicializar camera");
@@ -611,7 +620,7 @@ void detectacam(ALLEGRO_DISPLAY *janela){
 
             var2 = contador2 * 10;
             //printf("var %d\n", var);
-            if(randx2 > 410 && randy2  < 425 + var2 && randy2 > 360 + var2 && randx2 < 440){
+            if(randx2 > 410 && randy2  < 430 + var2 && randy2 > 360 + var2 && randx2 < 440){
                 life++;
                 contadorrandom2 = -30;
                 randx2 = 2000;
@@ -630,10 +639,20 @@ void detectacam(ALLEGRO_DISPLAY *janela){
 
 
             al_draw_bitmap(fogo, randx, randy, 0);
-            printf("%d %f %d\n", randx, randy, var);
             al_draw_bitmap(fogo2, randx2, randy2, 0);
-            printf("%d %f %d\n", randx2, randy2, var2);
-            printf("%d\n", contadorrandom2);
+
+
+            if(enex1 == 0){
+                eney1 =  randini();
+            }
+            if(enex1 > 500){
+                printf("hit\n");
+                enex1 = 0;
+            }
+            enex1++;
+            al_draw_bitmap(ini, enex1, eney1, 0);
+       
+           
 
             //printf("%d %f, %f\n", randx, randy, mult);
 
@@ -645,6 +664,8 @@ void detectacam(ALLEGRO_DISPLAY *janela){
                 al_draw_bitmap(tiro, 70, 0, 0);
                 al_draw_bitmap(fogo, randx, randy, 0);
                 al_draw_bitmap(fogo2, randx2, randy2, 0);
+                al_draw_bitmap(ini, enex1, eney1, 0);
+                
             }
             
             
@@ -668,6 +689,7 @@ void detectacam(ALLEGRO_DISPLAY *janela){
             ry = 0;
             bx = 0;
             by = 0;
+
             
 
             //camera_copia(cam, cam->quadro, esquerda);
@@ -686,12 +708,22 @@ void detectacam(ALLEGRO_DISPLAY *janela){
 
         //al_flip_display();
 
+
         }
 
    
 
     }
     al_stop_timer(timer);
+    al_destroy_bitmap(map);
+    al_destroy_bitmap(tiro);
+    al_destroy_bitmap(tirobaixo);
+    al_destroy_bitmap(tirocima);
+    al_destroy_bitmap(pula);
+    al_destroy_bitmap(pula2);
+    al_destroy_bitmap(fogo);
+    al_destroy_bitmap(fogo2);
+    al_destroy_bitmap(ini);
     //al_destroy_bitmap(direita);
 
     //al_destroy_bitmap(esquerda);
