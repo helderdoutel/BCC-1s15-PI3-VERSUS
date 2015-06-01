@@ -474,7 +474,7 @@ void detectacam(ALLEGRO_DISPLAY *janela){
             }
             al_flip_display();
      
-            angulo = 0;
+            //angulo = 0;
             pulou = 0;
             contador++;
             camera_atualiza(cam);  
@@ -568,6 +568,7 @@ void detectacam(ALLEGRO_DISPLAY *janela){
             if(pulou == 1 && contador2 == 0){
                 al_draw_bitmap(map, 0, 0, 0);
                 al_draw_bitmap(pula, 0, 0, 0);
+                al_draw_bitmap(ini, enex1, eney1, 0);
                 contador2 = -1;
                 flag = 1;
                 al_flip_display();
@@ -576,6 +577,7 @@ void detectacam(ALLEGRO_DISPLAY *janela){
             if(contador2 <= -1 && contador2 > -12){
                 al_draw_bitmap(map, 0, 0, 0);
                 al_draw_bitmap(pula, 0, (contador2 * 5), 0);
+                al_draw_bitmap(ini, enex1, eney1, 0);
                 //printf("entrou 2\n");
                 al_flip_display();
                 if(contador2 == -11){
@@ -605,7 +607,7 @@ void detectacam(ALLEGRO_DISPLAY *janela){
                 contadorrandom = 0;
             }
             if(life == 5)
-                break;
+                continuar = 0;
             ////////////////////////  
 
 
@@ -633,7 +635,7 @@ void detectacam(ALLEGRO_DISPLAY *janela){
                 randy2 = -2000;
             }
             if(life == 5)
-                break;    
+                continuar = 0;    
             //////////////////////////////////
 
 
@@ -661,7 +663,12 @@ void detectacam(ALLEGRO_DISPLAY *janela){
 
             if(pulou == 0 && contador2 == 0){
                 al_draw_bitmap(map, 0, 0, 0);
-                al_draw_bitmap(tiro, 70, 0, 0);
+                if(angulo == 0)
+                    al_draw_bitmap(tiro, 70, 0, 0);
+                if(angulo == 1)
+                    al_draw_bitmap(tirocima, 0, 0, 0);
+                if(angulo == -1)
+                    al_draw_bitmap(tirobaixo, 0, 0, 0);
                 al_draw_bitmap(fogo, randx, randy, 0);
                 al_draw_bitmap(fogo2, randx2, randy2, 0);
                 al_draw_bitmap(ini, enex1, eney1, 0);
