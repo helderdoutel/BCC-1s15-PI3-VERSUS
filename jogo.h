@@ -651,7 +651,7 @@ void detectacam(ALLEGRO_DISPLAY *janela){
             al_draw_bitmap(ini, enex1, eney1, 0);
 
 
-            if(enex1 == 0){
+            if(enex1 == -300){
                 eney1 =  randini();
                 eney1 = eney1 + 200;
             }
@@ -659,9 +659,9 @@ void detectacam(ALLEGRO_DISPLAY *janela){
 
             if(enex1 > 500){
                 lifetorre++;
-                enex1 = 0;
+                enex1 = -300;
             }
-            al_draw_bitmap(ini, enex1, eney1, 0);
+            
        
            
 
@@ -729,7 +729,7 @@ void detectacam(ALLEGRO_DISPLAY *janela){
             }
 
             if(tpx >= enex1 && tpx <= (enex1 + 150) && tpy >= eney1 && tpy <= (eney1 + 100)){
-                enex1 = 0;
+                enex1 = -300;
             }
 
             if(lifetorre == 10){
