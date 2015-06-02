@@ -17,7 +17,7 @@ int randompoint(){
 int randini(){
         time_t t;
         srand((unsigned) time(&t));
-        return rand()%480+1;
+        return rand()%200+1;
 }
 
 float aleatorio(float *y){
@@ -27,11 +27,11 @@ float aleatorio(float *y){
     if(random < 0){
         random = random * -1;
     }
-    printf("ramdom%f  y%f\n", random, *y);
+    //printf("ramdom%f  y%f\n", random, *y);
     return random;
 }
 
-int pver(unsigned char ***matriz, int altura, int largura, int *rx, int *ry){
+void pver(unsigned char ***matriz, int altura, int largura, int *rx, int *ry){
     int baixo, direita, esquerda, cima;
     int r, g, b;
     int achoux, achouy;
@@ -61,10 +61,10 @@ int pver(unsigned char ***matriz, int altura, int largura, int *rx, int *ry){
             esquerda = 0;
         }
     }
-    return 1;
+    return;
 }
 
-int pazul(unsigned char ***matriz, int altura, int largura, int *bx, int *by, int *ry){
+void pazul(unsigned char ***matriz, int altura, int largura, int *bx, int *by, int *ry){
     int baixo, direita, esquerda, cima;
     int r, g, b;
     int achoux, achouy;
@@ -82,7 +82,7 @@ int pazul(unsigned char ***matriz, int altura, int largura, int *bx, int *by, in
                     direita = matriz[x][(y + 5)][2];
                     esquerda = matriz[x][(y - 5)][2];
                 }
-                if(cima == 255 && baixo == 255 && direita == 255 && esquerda == 255 && *ry > y){
+                if(cima == 255 && baixo == 255 && direita == 255 && esquerda == 255 && *ry - 50 > y){
                     *bx = x;
                     *by = y;
                 }
@@ -93,14 +93,14 @@ int pazul(unsigned char ***matriz, int altura, int largura, int *bx, int *by, in
             esquerda = 0;
         }
     }
-    return 1;
+    return;
 }
 
 int pega(int rx, int ry, int bx, int by, int *srx, int *sry, int *sbx, int *sby){
     //printf("%d %d\n", rx, *srx);
     int x = 0;
     if(rx < *srx - 50 && rx != *srx){
-        printf("pulou: %d %d\n", rx, *srx);
+        //printf("pulou: %d %d\n", rx, *srx);
         x = 1;
     }
 
@@ -150,11 +150,11 @@ int ang (int rx, int ry, int bx, int by){
 
     //printf("%f\n", seno);
     if (seno > 0.34 && seno < 1 && bx < rx){
-        printf("45\n");
+        //printf("45\n");
         angulo = 1;
     }
     if (seno > 0.34 && seno < 1 && bx > rx){
-        printf("- 45\n");
+        //printf("- 45\n");
         angulo = -1;
     }
 
@@ -260,14 +260,14 @@ void testecam(){
                 }
 
             }
-            f = pver(matriz,altura,largura,&rx,&ry);
-            f = pazul(matriz,altura,largura,&bx,&by,&ry);
+            pver(matriz,altura,largura,&rx,&ry);
+            pazul(matriz,altura,largura,&bx,&by,&ry);
 
             if(rx < 10 && ry < 10){
                 pause++;
                 printf("%d\n", pause);
                 if(pause == 60){
-                    printf("Pausou\n");
+                    //printf("Pausou\n");
                     while(1){
                         al_flip_display();
                         camera_atualiza(cam);
@@ -296,12 +296,12 @@ void testecam(){
                     
                         }
                         pver(matriz,altura,largura,&rx,&ry);
-                        printf("passou1\n");
+                        //printf("passou1\n");
                         
                         if(rx > 10){
                             pause = 0;
                             break;
-                            printf("passou2\n");
+                            //printf("passou2\n");
                         }
                     }
                 }
@@ -372,7 +372,7 @@ void testecam(){
 
 void detectacam(ALLEGRO_DISPLAY *janela){
     ALLEGRO_BITMAP *map = NULL, *tiro = NULL, *tirobaixo = NULL, *tirocima = NULL, *pula = NULL, *pula2 = NULL;
-    ALLEGRO_BITMAP *fogo = NULL, *fogo2 = NULL, *ini;
+    ALLEGRO_BITMAP *fogo = NULL, *fogo2 = NULL, *ini = NULL, *fogo3 = NULL;
     int rx, ry, bx, by;
     int srx, sry, sbx, sby; //guarda valor antigo
     int testex, testey, contador = 0, acao = 0, contadorrandom = 0;
@@ -388,6 +388,8 @@ void detectacam(ALLEGRO_DISPLAY *janela){
     float mult2, randy2, dif2;
     int life = 0, pause = 0;
     int enex1 = 0, enex2 = 0, enex3 = 0, eney1 = 0, eney2 = 0, eney3 = 0;
+    int tpx = 0, tpy = 0, flagtp = 0;
+    int score = 0, lifetorre = 0;
 
     map = al_load_bitmap("imagens/mapadefender.png");
     tiro = al_load_bitmap("imagens/tiro.png");
@@ -396,6 +398,7 @@ void detectacam(ALLEGRO_DISPLAY *janela){
     pula = al_load_bitmap("imagens/pula1.png");
     pula2 = al_load_bitmap("imagens/pula2.png");
     fogo = al_load_bitmap("imagens/tiros.png");
+    fogo3 = al_load_bitmap("imagens/tiros2.png");
     fogo2 = al_load_bitmap("imagens/tiros.png");
     ini = al_load_bitmap("imagens/inimigo.png");
 
@@ -511,12 +514,12 @@ void detectacam(ALLEGRO_DISPLAY *janela){
                 }
 
             }
-            f = pver(matriz,altura,largura,&rx,&ry);
-            f = pazul(matriz,altura,largura,&bx,&by,&ry);
+            pver(matriz,altura,largura,&rx,&ry);
+            pazul(matriz,altura,largura,&bx,&by,&ry);
 
             if(rx < 10 && ry < 10){
                 pause++;
-                printf("%d\n", pause);
+                //printf("%d\n", pause);
                 if(pause == 60){
                     printf("Pausou\n");
                     while(1){
@@ -547,11 +550,9 @@ void detectacam(ALLEGRO_DISPLAY *janela){
                     
                         }
                         pver(matriz,altura,largura,&rx,&ry);
-                        printf("passou1\n");
                         if(rx > 10){
                             pause = 0;
                             break;
-                            printf("passou2\n");
                         }
                     }
                 }
@@ -569,6 +570,7 @@ void detectacam(ALLEGRO_DISPLAY *janela){
                 al_draw_bitmap(map, 0, 0, 0);
                 al_draw_bitmap(pula, 0, 0, 0);
                 al_draw_bitmap(ini, enex1, eney1, 0);
+                al_draw_bitmap(fogo3, tpx, tpy, 0);
                 contador2 = -1;
                 flag = 1;
                 al_flip_display();
@@ -578,6 +580,7 @@ void detectacam(ALLEGRO_DISPLAY *janela){
                 al_draw_bitmap(map, 0, 0, 0);
                 al_draw_bitmap(pula, 0, (contador2 * 5), 0);
                 al_draw_bitmap(ini, enex1, eney1, 0);
+                al_draw_bitmap(fogo3, tpx, tpy, 0);
                 //printf("entrou 2\n");
                 al_flip_display();
                 if(contador2 == -11){
@@ -601,13 +604,14 @@ void detectacam(ALLEGRO_DISPLAY *janela){
             if(randx > 410 && randy  < 425 + var && randy > 360 + var && randx < 440){
                 life++;
                 contadorrandom = 0;
-                printf("%d %f %d\n", randx, randy, var);
+                //printf("%d %f %d\n", randx, randy, var);
             }
             if(randx > 800 || randy > 600){
                 contadorrandom = 0;
             }
-            if(life == 5)
+            if(life == 5){
                 continuar = 0;
+            }
             ////////////////////////  
 
 
@@ -627,31 +631,36 @@ void detectacam(ALLEGRO_DISPLAY *janela){
                 contadorrandom2 = -30;
                 randx2 = 2000;
                 randy2 = 2000;
-                printf("%d %f %d\n", randx2, randy2, var2);
+                //printf("%d %f %d\n", randx2, randy2, var2);
             }
             if(randx2 > 800 || randy2 > 600){
                 contadorrandom2 = -50;
                 randx2 = -2000; 
                 randy2 = -2000;
             }
-            if(life == 5)
-                continuar = 0;    
+            if(life == 5){
+                continuar = 0;
+            }    
             //////////////////////////////////
 
 
 
             al_draw_bitmap(fogo, randx, randy, 0);
             al_draw_bitmap(fogo2, randx2, randy2, 0);
+            al_draw_bitmap(fogo3, tpx, tpy, 0);
+            al_draw_bitmap(ini, enex1, eney1, 0);
 
 
             if(enex1 == 0){
                 eney1 =  randini();
+                eney1 = eney1 + 200;
             }
+            enex1 =  enex1 + 10;
+
             if(enex1 > 500){
-                printf("hit\n");
+                lifetorre++;
                 enex1 = 0;
             }
-            enex1++;
             al_draw_bitmap(ini, enex1, eney1, 0);
        
            
@@ -671,9 +680,64 @@ void detectacam(ALLEGRO_DISPLAY *janela){
                     al_draw_bitmap(tirobaixo, 0, 0, 0);
                 al_draw_bitmap(fogo, randx, randy, 0);
                 al_draw_bitmap(fogo2, randx2, randy2, 0);
+                al_draw_bitmap(fogo3, tpx, tpy, 0);
                 al_draw_bitmap(ini, enex1, eney1, 0);
                 
             }
+
+
+            /////////////// tiro personagem ///////////////////
+
+            if(angulo == 0 && flagtp == 0){
+                tpx = 380 + contador2;
+                tpy = 375;
+                flagtp = 1;
+            }
+
+            if(angulo == 1 && flagtp == 0){
+                tpx = 380 + contador2;
+                tpy = 330;
+                flagtp = 1;
+            }
+
+            if(angulo == -1 && flagtp == 0){
+                tpx = 380 + contador2;
+                tpy = 400;
+                flagtp = 1;     
+            }
+
+            if(tpy < 375){
+                tpy = tpy - 20;
+            }
+
+            if(tpy > 375){
+                tpy = tpy + 20;
+            }
+
+            tpx = tpx - 20;
+
+            if(tpx < -200 || tpy < 0 || tpy > 600){
+                flagtp = 0;
+            }
+
+            if(tpx >= randx && tpx <= randx + 30 && tpy >= randy && tpy <= randy + 30){
+                contadorrandom = 0;
+            }
+
+            if(tpx >= randx2 && tpx <= randx2 + 30 && tpy >= randy2 && tpy <= randy2 + 30){
+                contadorrandom2 = 0;
+            }
+
+            if(tpx >= enex1 && tpx <= (enex1 + 150) && tpy >= eney1 && tpy <= (eney1 + 100)){
+                enex1 = 0;
+            }
+
+            if(lifetorre == 10){
+                continuar = 0;
+            }
+
+
+
             
             
             for(;rx < altura; rx++){
