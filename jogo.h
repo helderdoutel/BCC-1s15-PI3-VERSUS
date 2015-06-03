@@ -42,13 +42,13 @@ void pver(unsigned char ***matriz, int altura, int largura, int *rx, int *ry){
             g = matriz[x][y][1];
             b = matriz[x][y][2];
             if(r == 255 && b == 0 && g == 0){
-                if(x + 5 < altura && x - 5 > 0){
-                    cima = matriz[(x + 5)][y][0];
-                    baixo = matriz[(x - 5)][y][0];
+                if(x + 10 < altura && x - 10 > 0){
+                    cima = matriz[(x + 10)][y][0];
+                    baixo = matriz[(x - 10)][y][0];
                 }
-                if(y + 5 < largura && y - 5 > 0){
-                    direita = matriz[x][(y + 5)][0];
-                    esquerda = matriz[x][(y - 5)][0];
+                if(y + 10 < largura && y - 10 > 0){
+                    direita = matriz[x][(y + 10)][0];
+                    esquerda = matriz[x][(y - 10)][0];
                 }
                 if(cima == 255 && baixo == 255 && direita == 255 && esquerda == 255 && y > *ry){
                     *rx = x;
@@ -74,13 +74,13 @@ void pazul(unsigned char ***matriz, int altura, int largura, int *bx, int *by, i
             g = matriz[x][y][1];
             b = matriz[x][y][2];
             if(r == 0 && b == 255 && g == 0){
-                if(x + 5 < altura && x - 5 > 0){
-                    cima = matriz[(x + 5)][y][2];
-                    baixo = matriz[(x - 5)][y][2];
+                if(x + 10 < altura && x - 10 > 0){
+                    cima = matriz[(x + 10)][y][2];
+                    baixo = matriz[(x - 10)][y][2];
                 }
-                if(y + 5 < largura && y - 5 > 0){
-                    direita = matriz[x][(y + 5)][2];
-                    esquerda = matriz[x][(y - 5)][2];
+                if(y + 10 < largura && y - 10 > 0){
+                    direita = matriz[x][(y + 10)][2];
+                    esquerda = matriz[x][(y - 10)][2];
                 }
                 if(cima == 255 && baixo == 255 && direita == 255 && esquerda == 255 && *ry - 50 > y){
                     *bx = x;
@@ -534,7 +534,7 @@ void detectacam(ALLEGRO_DISPLAY *janela){
                                 int r = cam->quadro[x][y][0];
                                 int g = cam->quadro[x][y][1];
                                 int b = cam->quadro[x][y][2];
-                                if(r > 160 && r>g+50 && r>b+50){
+                                if(r > 180 && r>g+50 && r>b+50){
                                     matriz[x][y][0] = 255;
                                     matriz[x][y][1] = 0;  
                                     matriz[x][y][2] = 0;
