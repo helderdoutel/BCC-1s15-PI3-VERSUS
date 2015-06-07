@@ -42,13 +42,13 @@ void pver(unsigned char ***matriz, int altura, int largura, int *rx, int *ry){
             g = matriz[x][y][1];
             b = matriz[x][y][2];
             if(r == 255 && b == 0 && g == 0){
-                if(x + 10 < altura && x - 10 > 0){
-                    cima = matriz[(x + 10)][y][0];
-                    baixo = matriz[(x - 10)][y][0];
+                if(x + 5 < altura && x - 5 > 0){
+                    cima = matriz[(x + 5)][y][0];
+                    baixo = matriz[(x - 5)][y][0];
                 }
-                if(y + 10 < largura && y - 10 > 0){
-                    direita = matriz[x][(y + 10)][0];
-                    esquerda = matriz[x][(y - 10)][0];
+                if(y + 5 < largura && y - 5 > 0){
+                    direita = matriz[x][(y + 5)][0];
+                    esquerda = matriz[x][(y - 5)][0];
                 }
                 if(cima == 255 && baixo == 255 && direita == 255 && esquerda == 255 && y > *ry){
                     *rx = x;
@@ -74,13 +74,13 @@ void pazul(unsigned char ***matriz, int altura, int largura, int *bx, int *by, i
             g = matriz[x][y][1];
             b = matriz[x][y][2];
             if(r == 0 && b == 255 && g == 0){
-                if(x + 10 < altura && x - 10 > 0){
-                    cima = matriz[(x + 10)][y][2];
-                    baixo = matriz[(x - 10)][y][2];
+                if(x + 5 < altura && x - 5 > 0){
+                    cima = matriz[(x + 5)][y][2];
+                    baixo = matriz[(x - 5)][y][2];
                 }
-                if(y + 10 < largura && y - 10 > 0){
-                    direita = matriz[x][(y + 10)][2];
-                    esquerda = matriz[x][(y - 10)][2];
+                if(y + 5 < largura && y - 5 > 0){
+                    direita = matriz[x][(y + 5)][2];
+                    esquerda = matriz[x][(y - 5)][2];
                 }
                 if(cima == 255 && baixo == 255 && direita == 255 && esquerda == 255 && *ry - 50 > y){
                     *bx = x;
@@ -267,6 +267,7 @@ void testecam(){
                 pause++;
                 printf("%d\n", pause);
                 if(pause == 60){
+                    continuar = 0;
                     //printf("Pausou\n");
                     while(1){
                         al_flip_display();
@@ -307,6 +308,8 @@ void testecam(){
                 }
 
             }
+            if(rx > 10 && pause > 30)
+                pause = 0;
             //printf("vermelho x = %d y = %d / azul x = %d y = %d\n", rx, ry, bx, by);
             if(contador == 5){
                 pulou = pega(rx, ry, bx, by, &srx, &sry, &sbx, &sby);
@@ -359,10 +362,16 @@ void testecam(){
     }
     al_stop_timer(timer);
     al_destroy_bitmap(direita);
-
     al_destroy_bitmap(esquerda);
-
     camera_libera_matriz(cam, matriz);
+    al_unregister_event_source(queue, al_get_timer_event_source(timer));
+    al_destroy_timer(timer);
+    al_unregister_event_source(queue, al_get_display_event_source(display));
+    al_destroy_event_queue(queue);
+    //al_shutdown_primitives_addon();
+    //al_uninstall_system();
+
+    camera_finaliza(cam);
 
     return;
 }
@@ -372,7 +381,7 @@ void testecam(){
 
 void detectacam(ALLEGRO_DISPLAY *janela){
     ALLEGRO_BITMAP *map = NULL, *tiro = NULL, *tirobaixo = NULL, *tirocima = NULL, *pula = NULL, *pula2 = NULL;
-    ALLEGRO_BITMAP *fogo = NULL, *fogo2 = NULL, *ini = NULL, *fogo3 = NULL;
+    ALLEGRO_BITMAP *fogo = NULL, *fogo2  = NULL, *ini = NULL, *fogo3 = NULL, *ipause = NULL, *inicia = NULL;
     int rx, ry, bx, by;
     int srx, sry, sbx, sby; //guarda valor antigo
     int testex, testey, contador = 0, acao = 0, contadorrandom = 0;
@@ -401,6 +410,8 @@ void detectacam(ALLEGRO_DISPLAY *janela){
     fogo3 = al_load_bitmap("imagens/tiros2.png");
     fogo2 = al_load_bitmap("imagens/tiros.png");
     ini = al_load_bitmap("imagens/inimigo.png");
+    ipause = al_load_bitmap("imagens/pause.png");
+    inicia = al_load_bitmap("imagens/inicio.png");
 
 	if(!cam)
         printf("nao foi possivel inicializar camera");
@@ -447,6 +458,9 @@ void detectacam(ALLEGRO_DISPLAY *janela){
     al_start_timer(timer);
     int atualizar = 1, continuar = 1;
     printf("%d %d\n", altura, largura);
+    al_draw_bitmap(inicia, 0, 0, 0);
+    al_flip_display();
+    al_rest(10);
     al_draw_bitmap(map, 0, 0, 0);
     al_draw_bitmap(tiro, 70, 0, 0);
     
@@ -523,6 +537,7 @@ void detectacam(ALLEGRO_DISPLAY *janela){
                 if(pause == 60){
                     printf("Pausou\n");
                     while(1){
+                        al_draw_bitmap(ipause, 0, 0, 0);
                         al_flip_display();
                         camera_atualiza(cam);
                         for(int x = 0; x < altura ; x++){
@@ -795,11 +810,20 @@ void detectacam(ALLEGRO_DISPLAY *janela){
     al_destroy_bitmap(fogo);
     al_destroy_bitmap(fogo2);
     al_destroy_bitmap(ini);
+    al_destroy_bitmap(ipause);
     //al_destroy_bitmap(direita);
 
     //al_destroy_bitmap(esquerda);
 
     camera_libera_matriz(cam, matriz);
+    al_unregister_event_source(queue, al_get_timer_event_source(timer));
+    al_destroy_timer(timer);
+    //al_unregister_event_source(queue, al_get_display_event_source(display));
+    al_destroy_event_queue(queue);
+    //al_shutdown_primitives_addon();
+    //al_uninstall_system();
+
+    camera_finaliza(cam);
 
 	return;
 }
