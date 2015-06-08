@@ -243,7 +243,7 @@ void testecam(){
                     
                     else{
                         
-                        if(b >160 && b > g+50 && b > r+50){
+                        if(b >120 && b > g+70 && b > r+70){
                             matriz[x][y][0] = 0;
                             matriz[x][y][1] = 0;  
                             matriz[x][y][2] = 255;
@@ -458,9 +458,9 @@ void detectacam(ALLEGRO_DISPLAY *janela){
     al_start_timer(timer);
     int atualizar = 1, continuar = 1;
     printf("%d %d\n", altura, largura);
-    al_draw_bitmap(inicia, 0, 0, 0);
-    al_flip_display();
-    al_rest(10);
+    //al_draw_bitmap(inicia, 0, 0, 0);
+    //al_flip_display();
+    //al_rest(10);
     al_draw_bitmap(map, 0, 0, 0);
     al_draw_bitmap(tiro, 70, 0, 0);
     
@@ -511,7 +511,7 @@ void detectacam(ALLEGRO_DISPLAY *janela){
                     
                     else{
                         
-                        if(b >160 && b > g+50 && b > r+50){
+                        if(b >120 && b > g+70 && b > r+70 ){
                             matriz[x][y][0] = 0;
                             matriz[x][y][1] = 0;  
                             matriz[x][y][2] = 255;
@@ -537,7 +537,7 @@ void detectacam(ALLEGRO_DISPLAY *janela){
                 if(pause == 60){
                     printf("Pausou\n");
                     while(1){
-                        al_draw_bitmap(ipause, 0, 0, 0);
+                        //al_draw_bitmap(ipause, 0, 0, 0);
                         al_flip_display();
                         camera_atualiza(cam);
                         for(int x = 0; x < altura ; x++){
