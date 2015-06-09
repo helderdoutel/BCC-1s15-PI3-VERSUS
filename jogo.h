@@ -6,6 +6,9 @@
 #include "camera.h"
 #include "math.h"
 
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
+
 #define FPS 60
 
 int randompoint(){
@@ -382,6 +385,7 @@ void testecam(){
 void detectacam(ALLEGRO_DISPLAY *janela){
     ALLEGRO_BITMAP *map = NULL, *tiro = NULL, *tirobaixo = NULL, *tirocima = NULL, *pula = NULL, *pula2 = NULL;
     ALLEGRO_BITMAP *fogo = NULL, *fogo2  = NULL, *ini = NULL, *fogo3 = NULL, *ipause = NULL, *inicia = NULL;
+    ALLEGRO_FONT *fonte = NULL;
     int rx, ry, bx, by;
     int srx, sry, sbx, sby; //guarda valor antigo
     int testex, testey, contador = 0, acao = 0, contadorrandom = 0;
@@ -399,6 +403,8 @@ void detectacam(ALLEGRO_DISPLAY *janela){
     int enex1 = 0, enex2 = 0, enex3 = 0, eney1 = 0, eney2 = 0, eney3 = 0;
     int tpx = 0, tpy = 0, flagtp = 0;
     int score = 0, lifetorre = 0;
+
+    fonte = al_load_font("fonte/arial_narrow_7.ttf", 30, 0);
 
     map = al_load_bitmap("imagens/mapadefender.png");
     tiro = al_load_bitmap("imagens/tiro.png");
@@ -458,9 +464,9 @@ void detectacam(ALLEGRO_DISPLAY *janela){
     al_start_timer(timer);
     int atualizar = 1, continuar = 1;
     printf("%d %d\n", altura, largura);
-    //al_draw_bitmap(inicia, 0, 0, 0);
-    //al_flip_display();
-    //al_rest(10);
+    al_draw_bitmap(inicia, 0, 0, 0);
+    al_flip_display();
+    al_rest(10);
     al_draw_bitmap(map, 0, 0, 0);
     al_draw_bitmap(tiro, 70, 0, 0);
     
@@ -537,7 +543,7 @@ void detectacam(ALLEGRO_DISPLAY *janela){
                 if(pause == 60){
                     printf("Pausou\n");
                     while(1){
-                        //al_draw_bitmap(ipause, 0, 0, 0);
+                        al_draw_bitmap(ipause, 0, 0, 0);
                         al_flip_display();
                         camera_atualiza(cam);
                         for(int x = 0; x < altura ; x++){
@@ -564,11 +570,17 @@ void detectacam(ALLEGRO_DISPLAY *janela){
                             }
                     
                         }
+                        pause++;
                         pver(matriz,altura,largura,&rx,&ry);
+                        if(pause > 300){
+                            continuar = 0;
+                            break;
+                        }
                         if(rx > 10){
                             pause = 0;
                             break;
                         }
+                        //printf("%d\n", pause);
                     }
                 }
 
@@ -664,6 +676,7 @@ void detectacam(ALLEGRO_DISPLAY *janela){
             al_draw_bitmap(fogo2, randx2, randy2, 0);
             al_draw_bitmap(fogo3, tpx, tpy, 0);
             al_draw_bitmap(ini, enex1, eney1, 0);
+            al_draw_text(fonte, al_map_rgb(255, 255, 255), 10, 10, 0, "Pontos:");
 
 
             if(enex1 == -300){
@@ -697,6 +710,7 @@ void detectacam(ALLEGRO_DISPLAY *janela){
                 al_draw_bitmap(fogo2, randx2, randy2, 0);
                 al_draw_bitmap(fogo3, tpx, tpy, 0);
                 al_draw_bitmap(ini, enex1, eney1, 0);
+                al_draw_text(fonte, al_map_rgb(255, 255, 255), 10, 10, 0, "Pontos:");
                 
             }
 
@@ -745,6 +759,8 @@ void detectacam(ALLEGRO_DISPLAY *janela){
 
             if(tpx >= enex1 && tpx <= (enex1 + 150) && tpy >= eney1 && tpy <= (eney1 + 100)){
                 enex1 = -300;
+                score++;
+                printf("%d\n", score);
             }
 
             if(lifetorre == 10){

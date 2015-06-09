@@ -24,6 +24,8 @@ int main(void){
  
 	// Iniciando os Addons
     al_init_image_addon();
+    al_init_font_addon();
+    al_init_ttf_addon();
 	al_install_mouse();
 	al_set_system_mouse_cursor(janela, ALLEGRO_SYSTEM_MOUSE_CURSOR_DEFAULT);
  
