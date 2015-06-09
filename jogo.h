@@ -401,7 +401,7 @@ void detectacam(ALLEGRO_DISPLAY *janela){
     float mult, randy, dif;
     float mult2, randy2, dif2;
     int life = 0, pause = 0;
-    int enex1 = 0, enex2 = 0, enex3 = 0, eney1 = 0, eney2 = 0, eney3 = 0;
+    int enex1 = 0, enex2 = 0, enex3 = 0, eney1 = 300, eney2 = 0, eney3 = 0;
     int tpx = 0, tpy = 0, flagtp = 0;
     int score = 0, lifetorre = 0;
 
