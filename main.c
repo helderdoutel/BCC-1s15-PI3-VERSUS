@@ -13,19 +13,25 @@ ALLEGRO_BITMAP *fundo_jogo = NULL, *mapa_br = NULL;
 
 int main(void){
     ALLEGRO_DISPLAY *janela = NULL;
-    ALLEGRO_BITMAP *imagem = NULL, *botao_sair = NULL, *botao_jogar = NULL, *botao_opcoes = NULL;
+    ALLEGRO_BITMAP *imagem = NULL, *botao_sair = NULL, *botao_jogar = NULL, *botao_opcoes = NULL, *musical = NULL, *musicad = NULL;
 	ALLEGRO_BITMAP *botao_sair_press = NULL, *botao_jogar_press = NULL, *botao_opcoes_press = NULL;
 	ALLEGRO_BITMAP *fundo_jogo = NULL;
 	ALLEGRO_EVENT_QUEUE *fila_eventos = NULL;
-	int sair = 0, teste = 0, jogar = 0, opcoes = 0;
+	ALLEGRO_AUDIO_STREAM *musica = NULL;
+	ALLEGRO_SAMPLE *hit = NULL, *tiro = NULL;
+	int sair = 0, teste = 0, jogar = 0, opcoes = 0, sm = 1;
 
     // Inicializa a Allegro
     al_init();
  
 	// Iniciando os Addons
+	al_install_audio();
+	al_init_acodec_addon();
+	al_reserve_samples(1);
     al_init_image_addon();
     al_init_font_addon();
     al_init_ttf_addon();
+
 	al_install_mouse();
 	al_set_system_mouse_cursor(janela, ALLEGRO_SYSTEM_MOUSE_CURSOR_DEFAULT);
  
@@ -34,6 +40,8 @@ int main(void){
 	fila_eventos = al_create_event_queue();
  
     // Carrega a imagem
+    musicad = al_load_bitmap("imagens/md.png");
+    musical = al_load_bitmap("imagens/mo.png");
     imagem = al_load_bitmap("imagens/fundo.png");
  	botao_sair = al_load_bitmap("imagens/botaosair.png");
 	botao_jogar = al_load_bitmap("imagens/botaojogar.png");
@@ -44,8 +52,12 @@ int main(void){
 	fundo_jogo = al_load_bitmap("imagens/mapadefender.png");
 	// Desenhar abertura do Jogo
 
+	musica = al_load_audio_stream("sons/kickstarter.wav", 4, 1424);
+
 	//Falar que os eventos vão vir do Mouse
     al_register_event_source(fila_eventos, al_get_mouse_event_source());
+    al_attach_audio_stream_to_mixer(musica, al_get_default_mixer());
+    al_set_audio_stream_playing(musica, true);
 
 	while(sair == 0){
 
@@ -55,6 +67,13 @@ int main(void){
 		al_draw_bitmap(botao_sair, 30, 420, 0);
 		al_draw_bitmap(botao_opcoes, 30, 220, 0);
 		al_draw_bitmap(botao_jogar, 30, 20, 0);
+		if(sm == 1){
+			al_draw_bitmap(musical, 0 , 0, 0);
+		}
+		else{
+			al_draw_bitmap(musicad, 0 , 0, 0);
+		}
+
 
 		al_flip_display();
 		al_wait_for_event(fila_eventos, &evento);
@@ -94,6 +113,20 @@ int main(void){
 				jogar = 1;
 				if(jogar == 1)
 					detectacam(janela); 	
+			}
+			else if(evento.mouse.x >= 580 &&
+					evento.mouse.x <= 780 &&
+					evento.mouse.y <= ALTURA_TELA - 50 &&
+					evento.mouse.y >= 400){
+				
+				if(sm == 1){
+					sm = 0;
+					al_set_audio_stream_playing(musica, false);
+				}
+				else{
+					sm = 1;
+					al_set_audio_stream_playing(musica, true);
+				}
 			}
 		}
 	}

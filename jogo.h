@@ -9,6 +9,9 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
+
 #define FPS 60
 
 int randompoint(){
@@ -425,6 +428,7 @@ void detectacam(ALLEGRO_DISPLAY *janela){
     v4 = al_load_bitmap("imagens/4v.png");
     v5 = al_load_bitmap("imagens/5v.png");
 
+
 	if(!cam)
         printf("nao foi possivel inicializar camera");
 
@@ -760,7 +764,7 @@ void detectacam(ALLEGRO_DISPLAY *janela){
             if(angulo == -1 && flagtp == 0){
                 tpx = 380 + contador2;
                 tpy = 400;
-                flagtp = 1;     
+                flagtp = 1;   
             }
 
             if(tpy < 375){
@@ -855,6 +859,11 @@ void detectacam(ALLEGRO_DISPLAY *janela){
     al_destroy_bitmap(fogo2);
     al_destroy_bitmap(ini);
     al_destroy_bitmap(ipause);
+    al_destroy_bitmap(v1);
+    al_destroy_bitmap(v2);
+    al_destroy_bitmap(v3);
+    al_destroy_bitmap(v4);
+    al_destroy_bitmap(v5);
     //al_destroy_bitmap(direita);
 
     //al_destroy_bitmap(esquerda);
