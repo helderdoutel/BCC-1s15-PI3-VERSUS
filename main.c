@@ -128,6 +128,14 @@ int main(void){
 					al_set_audio_stream_playing(musica, true);
 				}
 			}
+			if(sm == 1){
+					sm = 0;
+					al_set_audio_stream_playing(musica, false);
+				}
+				else{
+					sm = 1;
+					al_set_audio_stream_playing(musica, true);
+				}
 		}
 	}
     // Finaliza a janela

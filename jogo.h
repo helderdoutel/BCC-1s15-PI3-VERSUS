@@ -80,13 +80,13 @@ void pazul(unsigned char ***matriz, int altura, int largura, int *bx, int *by, i
             g = matriz[x][y][1];
             b = matriz[x][y][2];
             if(r == 0 && b == 255 && g == 0){
-                if(x + 5 < altura && x - 5 > 0){
-                    cima = matriz[(x + 5)][y][2];
-                    baixo = matriz[(x - 5)][y][2];
+                if(x + 8 < altura && x - 8 > 0){
+                    cima = matriz[(x + 8)][y][2];
+                    baixo = matriz[(x - 8)][y][2];
                 }
-                if(y + 5 < largura && y - 5 > 0){
-                    direita = matriz[x][(y + 5)][2];
-                    esquerda = matriz[x][(y - 5)][2];
+                if(y + 8 < largura && y - 8 > 0){
+                    direita = matriz[x][(y + 8)][2];
+                    esquerda = matriz[x][(y - 8)][2];
                 }
                 if(cima == 255 && baixo == 255 && direita == 255 && esquerda == 255 && *ry - 50 > y){
                     *bx = x;
@@ -105,7 +105,7 @@ void pazul(unsigned char ***matriz, int altura, int largura, int *bx, int *by, i
 int pega(int rx, int ry, int bx, int by, int *srx, int *sry, int *sbx, int *sby){
     //printf("%d %d\n", rx, *srx);
     int x = 0;
-    if(rx < *srx - 50 && rx != *srx){
+    if(rx < *srx - 80 && rx != *srx){
         //printf("pulou: %d %d\n", rx, *srx);
         x = 1;
     }
@@ -241,11 +241,11 @@ void testecam(){
                     int r = cam->quadro[x][y][0];
                     int g = cam->quadro[x][y][1];
                     int b = cam->quadro[x][y][2];
-                    if(r > 160 && r>g+50 && r>b+50){
-                        matriz[x][y][0] = 255;
-                        matriz[x][y][1] = 0;  
-                        matriz[x][y][2] = 0;
-                    }
+                    if(r > 200 && r>g+100 && r>b+100){
+                                    matriz[x][y][0] = 255;
+                                    matriz[x][y][1] = 0;  
+                                    matriz[x][y][2] = 0;
+                    }  
                     
                     else{
                         
@@ -287,7 +287,7 @@ void testecam(){
                                 int r = cam->quadro[x][y][0];
                                 int g = cam->quadro[x][y][1];
                                 int b = cam->quadro[x][y][2];
-                                if(r > 160 && r>g+50 && r>b+50){
+                                if(r > 240 && r>g+150 && r>b+150){
                                     matriz[x][y][0] = 255;
                                     matriz[x][y][1] = 0;  
                                     matriz[x][y][2] = 0;
@@ -521,15 +521,15 @@ void detectacam(ALLEGRO_DISPLAY *janela){
                     int r = cam->quadro[x][y][0];
                     int g = cam->quadro[x][y][1];
                     int b = cam->quadro[x][y][2];
-                    if(r > 160 && r>g+50 && r>b+50){
-                        matriz[x][y][0] = 255;
-                        matriz[x][y][1] = 0;  
-                        matriz[x][y][2] = 0;
-                    }
+                    if(r > 200 && r>g+100 && r>b+100){
+                                    matriz[x][y][0] = 255;
+                                    matriz[x][y][1] = 0;  
+                                    matriz[x][y][2] = 0;
+                    } 
                     
                     else{
                         
-                        if(b >120 && b > g+70 && b > r+70 ){
+                        if(b >140 && b > g+50 && b > r+50 ){
                             matriz[x][y][0] = 0;
                             matriz[x][y][1] = 0;  
                             matriz[x][y][2] = 255;
@@ -567,7 +567,7 @@ void detectacam(ALLEGRO_DISPLAY *janela){
                                 int r = cam->quadro[x][y][0];
                                 int g = cam->quadro[x][y][1];
                                 int b = cam->quadro[x][y][2];
-                                if(r > 180 && r>g+50 && r>b+50){
+                                if(r > 180 && r>g+80 && r>b+80){
                                     matriz[x][y][0] = 255;
                                     matriz[x][y][1] = 0;  
                                     matriz[x][y][2] = 0;
